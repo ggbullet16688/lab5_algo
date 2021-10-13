@@ -1,6 +1,5 @@
 package com.company;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -13,11 +12,15 @@ import java.util.Random;
  */
 public class Main {
 
-    final static int N = 10; // Size of array.
-    final static int RANGE = 10; //Upper bound of random int in array.
-    final static int TRIALS = 1; // Each trail fill array with random values, call BF and T&C to find duplicates in ary.
+    final static int N = 1000; // Size of array.
+    final static int RANGE = Integer.MAX_VALUE; //Upper bound of random int in array.
+    final static int TRIALS = 5; // Each trail fill array with random values, call BF and T&C to find duplicates in ary.
     static int bfCounter = 0;  // Keep track with the total of duplicates.
     static int tcCounter = 0;// Keep track with the total of duplicates.
+    static double bfCPU = 0;
+    static double tcCPU = 0;
+    static double bfCPUTotal = 0;
+    static double tcCPUTotal = 0;
     final static double Hundred = 100.00;
 
     public static void main(String[] args) {
@@ -32,6 +35,9 @@ public class Main {
             if (tcVSP(ary)) {
                 tcCounter++;
             }
+            bfCPUTotal += bfCPU;
+            tcCPUTotal = tcCPUTotal + tcCPU;
+
         }
         print();
 
@@ -39,24 +45,41 @@ public class Main {
 
     // Brute force method to find duplicates.
     public static boolean bfVSP(int[] ary) {
+        long start = System.nanoTime();//System.currentTimeMillis();
+
         for (int i = 0; i < N - 1; i++) {
             for (int j = i + 1; j < N; j++) {
                 if (ary[i] == ary[j]) {
+                    long end = System.nanoTime();//System.currentTimeMillis();
+                    bfCPU = end - start;
+                    System.out.println("bf: " + bfCPU);
                     return true;
                 }
             }
         }
+        long end = System.nanoTime();//System.currentTimeMillis();
+        bfCPU = end - start;
+        System.out.println("bf: " + bfCPU);
         return false;
     }
 
     // T&C method to find duplicates.
     public static boolean tcVSP(int[] ary) {
+
+        long start = System.nanoTime();//System.currentTimeMillis();
+
         Arrays.sort(ary);
         for (int i = 0; i < ary.length - 1; i++) {
             if (ary[i] == ary[i + 1]) {
+                long end = System.nanoTime();//System.currentTimeMillis();
+                tcCPU = end - start;
+                System.out.println("tc: " + tcCPU);
                 return true;
             }
         }
+        long end = System.nanoTime();//System.currentTimeMillis();
+        tcCPU = end - start;
+        System.out.println("tc: " + tcCPU);
         return false;
     }
 
@@ -82,10 +105,10 @@ public class Main {
                 "NUM_TRIALS: " + TRIALS + '\n' +
                 "Duplicate array appearance: " + bfCounter + '\t' + tcCounter + '\n' +
                 "Probability of array containing duplicates: " + (bfCounter / TRIALS * Hundred) + "%\n" +
-                "Total amount of CPU time used for BF testing: " + '\n' +
-                "Average amount of CPU time used for BF testing: " + '\n' +
-                "Total amount of CPU time used for T&C testing: " + '\n' +
-                "Average amount of CPU time used for T&C testing : " + '\n'
+                "Total amount of CPU time used for BF testing: " + bfCPU + '\n' +
+                "Average amount of CPU time used for BF testing: " + (bfCPUTotal / TRIALS) + '\n' +
+                "Total amount of CPU time used for T&C testing: " + tcCPU + '\n' +
+                "Average amount of CPU time used for T&C testing : " + (tcCPUTotal / TRIALS) + '\n'
         );
 
     }
