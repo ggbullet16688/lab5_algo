@@ -4,17 +4,21 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
+ * Lab5
  * This program creates an array in size (N) with random values within an upper bound(RANGE).
  * And then find if there has duplicates in the array. A global counter to keep track with it.
  * For each TRAIL, repeat the process as described above.
  *
  * Track CPU time used before and after running BF and T&C method while running the program.
+ *
+ * StudentName: JunxianLiu (Stan)
+ * StudentID: A01175175
  */
 public class Main {
 
-    final static int N = 1000; // Size of array.
-    final static int RANGE = Integer.MAX_VALUE; //Upper bound of random int in array.
-    final static int TRIALS = 5; // Each trail fill array with random values, call BF and T&C to find duplicates in ary.
+    final static int N = 10000; // Size of array.
+    final static int RANGE = Integer.MAX_VALUE; //Upper bound of random int in array. Integer.MAX_VALUE
+    final static int TRIALS = 1000; // Each trail fill array with random values, call BF and T&C to find duplicates in ary.
     static int bfCounter = 0;  // Keep track with the total of duplicates.
     static int tcCounter = 0;// Keep track with the total of duplicates.
     static double bfCPU = 0;
@@ -27,7 +31,6 @@ public class Main {
 
         for (int i = 0; i < TRIALS; i++) {
             int[] ary = aryGenerator();
-            System.out.println(Arrays.toString(ary));
 
             if (bfVSP(ary)) {
                 bfCounter++;
@@ -37,7 +40,6 @@ public class Main {
             }
             bfCPUTotal += bfCPU;
             tcCPUTotal = tcCPUTotal + tcCPU;
-
         }
         print();
 
@@ -52,14 +54,12 @@ public class Main {
                 if (ary[i] == ary[j]) {
                     long end = System.nanoTime();//System.currentTimeMillis();
                     bfCPU = end - start;
-                    System.out.println("bf: " + bfCPU);
                     return true;
                 }
             }
         }
         long end = System.nanoTime();//System.currentTimeMillis();
         bfCPU = end - start;
-        System.out.println("bf: " + bfCPU);
         return false;
     }
 
@@ -73,13 +73,11 @@ public class Main {
             if (ary[i] == ary[i + 1]) {
                 long end = System.nanoTime();//System.currentTimeMillis();
                 tcCPU = end - start;
-                System.out.println("tc: " + tcCPU);
                 return true;
             }
         }
         long end = System.nanoTime();//System.currentTimeMillis();
         tcCPU = end - start;
-        System.out.println("tc: " + tcCPU);
         return false;
     }
 
@@ -105,9 +103,9 @@ public class Main {
                 "NUM_TRIALS: " + TRIALS + '\n' +
                 "Duplicate array appearance: " + bfCounter + '\t' + tcCounter + '\n' +
                 "Probability of array containing duplicates: " + (bfCounter / TRIALS * Hundred) + "%\n" +
-                "Total amount of CPU time used for BF testing: " + bfCPU + '\n' +
+                "Total amount of CPU time used for BF testing: " + bfCPUTotal + '\n' +
                 "Average amount of CPU time used for BF testing: " + (bfCPUTotal / TRIALS) + '\n' +
-                "Total amount of CPU time used for T&C testing: " + tcCPU + '\n' +
+                "Total amount of CPU time used for T&C testing: " + tcCPUTotal + '\n' +
                 "Average amount of CPU time used for T&C testing : " + (tcCPUTotal / TRIALS) + '\n'
         );
 
